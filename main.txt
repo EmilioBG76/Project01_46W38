@@ -58,11 +58,13 @@ interpolation = input('Type "cubic" if you do not wish to use linear interpolati
             g_v = (v-v_in) / (v_rated - v_in)
 
 
-    if v < v_in or v >= v_out:
+    if v < v_in or v >= v_out: # Turbine stopped due to low wind
         P_v = O
-    elif v_in <= v < v_rated:
+        
+    elif v_in <= v < v_rated:  # Turbine generating below rated power
         P_v = g_v * P_rated
-    elif v_rated <= v < v_out
+        
+    elif v_rated <= v < v_out  # Turbine generating rated power
         P_v = P_rated
         
 # Returns the computed power output using the model and the inputs.
