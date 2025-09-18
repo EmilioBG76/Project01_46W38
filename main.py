@@ -34,7 +34,36 @@ v_in = 3 # cut-in wind speed [m/s] units
 v_rated = 11 # rated wind speed [m/s] units
 v_out = 25 # cut-out wind speed [m/s] units
 
+# Initializing variable for power curve
+P_v = O 
 
+# Asking the user to enter the wind speed [m/s]
+
+v = float(input('Please enter the wind speed v[m/s]:'))
+
+# Asking the user if he/she wish to use cubic interpolation
+
+interporlation = input('Type "cubic" if you do not wish to use linear interpolation?')
+
+# For cubic interpolation the weighting function is calculated like this:
+        if interpolation == "cubic":
+            g_v = v**3 / v_rated**3
+    
+# For linear interpolation the weighting function is calculated like this:
+        else:
+            g_v = (v-v_in) / (v_rated - v_in)
+
+
+    if v < v_in or v >= v_out:
+        P_v = O
+    elif v_in <= v < v_rated:
+        P_v = g_v * P_rated
+    elif v_rated <= v < v_out
+        P_v = P_rated
+        
+# Returns the computed power output using the model and the inputs.
+    print(f'Then the power output is: {P_v} [MW]')
+    
 # Returns the computed power output using the model and the inputs.
 # Have proper docstring and several (at least 3) comments to explain the 
 # function.
