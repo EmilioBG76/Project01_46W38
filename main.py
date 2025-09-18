@@ -1,3 +1,4 @@
+# Importing numpy and matplot libraries
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -43,7 +44,7 @@ v = float(input('Please enter the wind speed v[m/s]:'))
 
 # Asking the user if he/she wish to use cubic interpolation
 
-interporlation = input('Type "cubic" if you do not wish to use linear interpolation?')
+interpolation = input('Type "cubic" if you do not wish to use linear interpolation?')
 
 # For cubic interpolation the weighting function is calculated like this:
         if interpolation == "cubic":
