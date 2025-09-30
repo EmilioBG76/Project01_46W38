@@ -1,7 +1,3 @@
-# Importing numpy and matplot libraries
-import numpy as np
-import matplotlib.pyplot as plt
-
 ## Variables
 # Power output P [MW]
 # Wind speed at hub height v [m/s]
@@ -21,76 +17,97 @@ import matplotlib.pyplot as plt
 ## Write a function to calculate the power output by implementing the model 
 # defined in the last section. 
 # Your function need to fullfil the following requirements:
-# wind speed (we assume it will be a float number)
-# rated power, with a default value: 15,
-# cut-in wind speed, with a default value: 3,
-# rated wind speed, with a default value: 11,
-# cut-out wind speed, with a default value: 25,
-# interpolation option, a string to define the interpolation method, can only be
-# "linear" or "cubic", with a default value: "linear".
+# - wind speed (we assume it will be a float number)
+# - rated power, with a default value: 15,
+# - cut-in wind speed, with a default value: 3,
+# - rated wind speed, with a default value: 11,
+# - cut-out wind speed, with a default value: 25,
+# - interpolation option, a string to define the interpolation method, can only be
+# - "linear" or "cubic", with a default value: "linear".
 
-# Assigment values to variables
-P_rated = 15 # [MW] units
-v_in = 3 # cut-in wind speed [m/s] units
-v_rated = 11 # rated wind speed [m/s] units
-v_out = 25 # cut-out wind speed [m/s] units
 
-# Initializing variable for power curve
-P_v = O 
+def output_WTpower(v: float | int,
+                   rated_power: float = 15, # Rated power in [MW] units
+                   cutin_ws: float = 3, # cut-in wind speed [m/s] units
+                   rated_ws: float = 11, # rated wind speed [m/s] units
+                   cutout_ws: float = 25, # cut-out wind speed [m/s] units
+                   interp_method: str = "linear") -> float:
+    
+    """Calculation of the power output of a wind turbine with the arguments provided
+    taking into account two interpolation options: linear or cubic. If the interpolation
+    chosen is not linear or cubic shows a message error"""
 
-# Asking the user to enter the wind speed [m/s]
-
-v = float(input('Please enter the wind speed v[m/s]:'))
-
-# Asking the user if he/she wish to use cubic interpolation
-
-interpolation = input('Type "cubic" if you do not wish to use linear interpolation?')
-
+# Asking the user if he/she wishes to use cubic interpolation 
+# or linear as default. Error message if is not a linear/cubic interpolation 
+# answered by user
+    if interp_method.lower() not in ["linear", "cubic"]:
+        raise ValueError("Incorrect interpolation, please choose linear or cubic")
+    
+    power_output = 0 # Initialization of the variable, [MW] units
+    
 # For cubic interpolation the weighting function is calculated like this:
-        if interpolation == "cubic":
-            g_v = v**3 / v_rated**3
+    if interp_method == "cubic":
+        g_v = v**3 / rated_ws**3
     
 # For linear interpolation the weighting function is calculated like this:
-        else:
-            g_v = (v-v_in) / (v_rated - v_in)
+    elif interp_method == "linear":
+        g_v = (v-cutin_ws) / (rated_ws - cutin_ws)
 
-    if v < v_in or v >= v_out: # Turbine stopped due to low wind
-        P_v = O
+# Calculating power output depending on wind speed value provided by the user
+    if v < cutin_ws or v >= cutout_ws: # Turbine stopped due to low wind
+        power_output = O
         
-    elif v_in <= v < v_rated:  # Turbine generating below rated power
-        P_v = g_v * P_rated
+    elif cutin_ws <= v < rated_ws:  # Turbine generating below rated power
+        power_output = g_v * rated_power
         
-    elif v_rated <= v < v_out  # Turbine generating rated power
-        P_v = P_rated
-        
-# Returns the computed power output using the model and the inputs.
-    print(f'Then the power output is: {P_v} [MW]')
+    elif rated_ws <= v < cutout_ws:  # Turbine generating rated power
+        power_output = rated_power
     
+    return power_output
+
+if __name__ == '__main__':
+    
+    # Calculation of power output with linear interpolation, v=9 [m/s] units 
+    v = float(input(f'Please enter a wind speed value:'))       
+    #v = 9 # wind speed test value, in [m/s] units
+    
+    power_output_lin = output_WTpower(v, interp_method = "linear")
+    print(f'For a wind speed of {v} [m/s] using linear interpolation, the power output is: {power_output_lin:.2f} [MW] units')
+    
+    # Calculation of power output with cubic interpolation, v=9 [m/s] units
+    power_output_cub = output_WTpower(v, interp_method = "cubic")
+    print(f'For a wind speed of {v} [m/s] using cubic interpolation, the power output is: {power_output_cub:.2f} [MW] units')
+    
+
+# Pendent, what happens for ws < cut-in value and ws > cut-out value
+
+
+
+## Script requirements    
 # Returns the computed power output using the model and the inputs.
 # Have proper docstring and several (at least 3) comments to explain the 
 # function.
 # Include error handling by raising proper error when the user gives an invalid 
 # input 
 # for the string defining the interpolation option.
-
 # You should also write the main script to run your function for at least one 
 # example. 
 # These can be done in one script that looks like the following:
 
-def add_two(x, y):
-    """
-    Docstring here.
-    """
-    # Add comment if needed.
-    result = x +  y # Add comment if needed.
+# def add_two(x, y):
+#    """
+#    Docstring here.
+#    """
+#    # Add comment if needed.
+#    result = x +  y # Add comment if needed.
 
-    return result
+#    return result
 
-if __name__ == '__main__':
+#if __name__ == '__main__':
     # Write the main script to use the function here:
-    x = 1
-    y = 1
+#    x = 1
+#    y = 1
 
     # Add comments to explain if needed.
-    z = add_two(x, y)
-    print(f'x + y = {z}')  # Add comment when needed
+#    z = add_two(x, y)
+#    print(f'x + y = {z}')  # Add comment when needed
