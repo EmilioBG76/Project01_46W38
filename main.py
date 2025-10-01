@@ -62,34 +62,49 @@ def output_WTpower(v: float | int,
         
     elif rated_ws <= v < cutout_ws:  # Turbine generating rated power
         power_output = rated_power
+        
+    elif v < 0:
+        raise ValueError(f'wind speed v should be positive, please enter a valid value') 
     
     return power_output
 
 if __name__ == '__main__':   
     # Calculation of power output with linear interpolation, asking for v to user
     # If value entered is a mistake then show wrong input message
-    try:    
-        v = float(input(f'Please enter a wind speed value:'))      
+    try:
+        print("Welcome! We're going now to calculate the output power of a wind turbine for a given wind speed")    
+        v = float(input(f'Please enter a wind speed value in [m/s] units:'))      
     except ValueError: # If the user types wrong the wind speed wrong message shown
         # Asking the user to enter again a correct value for wind speed
         print("Wrong input. Please enter again a value for wind speed.")
-        exit()
+        v = float(input(f'Please enter a wind speed value:')) 
+    #    exit()
     # Asking the user for a linear or cubic interp. method to use
     while True:
-        interp_method = input("Choose linear or cubic interpolation method (linear by default):") 
+        interp_method = input("Please choose now between linear or cubic interpolation method to be applied (linear by default):") 
     # Calculation of power output with linear interpolation
-        if interp_method.lower() == "linear" or interp_method == "":
+        if interp_method.lower() == "linear" or interp_method == "" or interp_method.lower() == "l":
             power_output_lin = output_WTpower(v, interp_method = "linear")
-            print(f'For a wind speed of {v} [m/s] using linear interpolation, the power output is: {power_output_lin:.2f} [MW]')
-            break
+            print(f'For a wind speed of {v} [m/s] using linear interpolation, the power output calculated is: {power_output_lin:.2f} [MW]')
+            # Asking the user about re-calculating power output for another wind speed given
+            answer = str(input("Do you wish to calculate another power output for a given wind speed value (Yes/No)?:"))
+            
+            if answer.lower() == "yes" or answer.lower() == "y":
+                v = float(input(f'Please enter another wind speed value:')) 
+            else:             
+                break
     # Calculation of power output with cubic interpolation
-        elif interp_method == "cubic":
+        elif interp_method.lower()  == "cubic" or interp_method.lower() == "c":
             power_output_cub = output_WTpower(v, interp_method = "cubic")
-            print(f'For a wind speed of {v} [m/s] using cubic interpolation, the power output is: {power_output_cub:.2f} [MW]')
-            break
-    # Asking the user to choose for linear or cubir interpolation again(as they are the 2 options offered)
-    else:
-        print("Please, choose between linear or cubic interpolation method.")
+            print(f'For a wind speed of {v} [m/s] using cubic interpolation, the power output calculated is: {power_output_cub:.2f} [MW]')
+            # Asking the user about re-calculating power output for another wind speed given
+            answer = str(input("Do you wish to calculate another power output for a given wind speed value (Yes/No)?:"))
+            
+            if answer.lower() == "yes" or answer.lower() == "y":
+                v = float(input(f'Please enter another wind speed value:')) 
+            else:             
+                break
+    
 
 
 
